@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1727066611965,
+      "tag": "0000_third_black_crow",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1727072596038,
+      "tag": "0001_puzzling_tusk",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1727072889367,
+      "tag": "0002_magical_triathlon",
+      "breakpoints": true
+    }
+  ]
+}

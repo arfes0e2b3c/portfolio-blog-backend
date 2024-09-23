@@ -1,0 +1,19 @@
+version: "3"
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    depends_on: 
+      - db
+    volumes:
+      - ./:/app  # ホストのカレントディレクトリをコンテナの /app にマウント
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: testdb
+    ports: 
+      - "3306:3306"
