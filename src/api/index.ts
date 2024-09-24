@@ -1,11 +1,12 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { articleApp } from "./article";
+import { categoryApp } from "./category";
 
 const app = new OpenAPIHono();
 
-app.route("/");
 app.route("/articles", articleApp);
+app.route("/categories", categoryApp);
 
 app.doc31("/doc", {
 	openapi: "3.1.0",
