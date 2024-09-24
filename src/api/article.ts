@@ -1,6 +1,7 @@
 import { OpenAPIHono, z } from "@hono/zod-openapi";
 import { eq, sql } from "drizzle-orm";
 import {
+	deleteArticleRoute,
 	fetchArticleListRoute,
 	patchArticleRoute,
 	postArticleRoute,
@@ -29,6 +30,15 @@ app.openapi(patchArticleRoute, async (c) => {
 		.set({ updatedAt: sql`NOW()`, ...body })
 		.where(eq(articlesTable.id, articleId));
 	return c.json({ id: articleId });
+});
+
+app.openapi(deleteArticleRoute, async (c) => {
+	const { articleId } = c.req.valid("param");
+	await db
+		.update(articlesTable)
+		.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
+		.where(eq(articlesTable.id, articleId));
+	return c.json({});
 });
 
 export { app as articleApp };

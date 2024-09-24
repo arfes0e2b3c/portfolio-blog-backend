@@ -103,3 +103,22 @@ export const patchArticleRoute = createRoute({
 		},
 	},
 });
+
+export const deleteArticleRoute = createRoute({
+	path: "/{articleId}",
+	method: "delete",
+	description: "記事を論理削除する",
+	request: {
+		params: z.object({
+			articleId: z.string(),
+		}),
+	},
+	responses: {
+		200: {
+			description: "OK",
+		},
+		500: {
+			description: "Internal Server Err",
+		},
+	},
+});
