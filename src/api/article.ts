@@ -12,7 +12,10 @@ import { articlesTable } from "../schema";
 const app = new OpenAPIHono();
 
 app.openapi(fetchArticleListRoute, async (c) => {
-	const allArticles = await db.select().from(articlesTable);
+	const allArticles = await db
+		.select()
+		.from(articlesTable)
+		.where(sql`${articlesTable.deletedAt} IS NULL`);
 	return c.json({ contents: allArticles });
 });
 
