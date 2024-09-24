@@ -33,10 +33,13 @@ export const articlesTable = mysqlTable("articles", {
 });
 
 export const categoriesTable = mysqlTable("categories", {
-	id: varchar("id", { length: 26 }).notNull().primaryKey(),
+	id: varchar("id", { length: 26 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => ulid()),
 	name: varchar("name", { length: 16 }).notNull().unique(),
-	createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
-	updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+	createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+	updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 	publishedAt: timestamp("published_at").default(sql`NULL`),
 	deletedAt: timestamp("deleted_at").default(sql`NULL`),
 });
