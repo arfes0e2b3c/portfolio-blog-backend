@@ -1,0 +1,1 @@
+ALTER TABLE `articles` MODIFY COLUMN `eyecatch` varchar(255);
