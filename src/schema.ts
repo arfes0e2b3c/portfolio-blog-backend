@@ -17,7 +17,7 @@ export const articlesTable = mysqlTable("articles", {
 	title: varchar("title", { length: 255 }).notNull().unique(),
 	content: text("content"),
 	draftContent: text("draft_content"),
-	eyecatch: varchar("eyecatch", { length: 100 }),
+	eyecatch: varchar("eyecatch", { length: 255 }),
 	category: varchar("category", { length: 26 }).references(
 		() => categoriesTable.id,
 		{ onDelete: "set null" },
