@@ -76,7 +76,7 @@ export const patchArticleRoute = createRoute({
 	description: "記事を更新する",
 	request: {
 		params: z.object({
-			articleId: z.string(),
+			articleId: zString("01J8F3CJR0NJM89W64KYWSEJVA"),
 		}),
 		body: {
 			required: true,
@@ -110,7 +110,7 @@ export const deleteArticleRoute = createRoute({
 	description: "記事を論理削除する",
 	request: {
 		params: z.object({
-			articleId: z.string(),
+			articleId: zString("01J8F3CJR0NJM89W64KYWSEJVA"),
 		}),
 	},
 	responses: {

@@ -68,7 +68,7 @@ export const patchCategoryRoute = createRoute({
 	description: "カテゴリーを更新する",
 	request: {
 		params: z.object({
-			categoryId: z.string(),
+			categoryId: zString("01J8F3CJR0NJM89W64KYWSEJVA"),
 		}),
 		body: {
 			required: true,
@@ -102,7 +102,7 @@ export const deleteCategoryRoute = createRoute({
 	description: "カテゴリーを論理削除する",
 	request: {
 		params: z.object({
-			categoryId: z.string(),
+			categoryId: zString("01J8F3CJR0NJM89W64KYWSEJVA"),
 		}),
 	},
 	responses: {
