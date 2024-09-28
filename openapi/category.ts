@@ -18,6 +18,8 @@ const CategoryInputSchema = z.object({
 	name: zString("カテゴリー"),
 });
 
+export type CategoryInputSchema = z.infer<typeof CategoryInputSchema>;
+
 export const fetchCategoryListRoute = createRoute({
 	path: "/",
 	method: "get",
