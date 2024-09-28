@@ -17,6 +17,13 @@ export const findCategoryByName = async (name: string) => {
 		.where(eq(categoriesTable.name, name));
 };
 
+export const findCategoryById = async (categoryId: string) => {
+	return await db
+		.select()
+		.from(categoriesTable)
+		.where(eq(categoriesTable.id, categoryId));
+};
+
 export const createCategory = async (body: CategoryInputSchema) => {
 	const res = await db.insert(categoriesTable).values(body).$returningId();
 	return res[0];

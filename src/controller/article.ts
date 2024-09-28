@@ -7,6 +7,7 @@ import {
 	postArticleRoute,
 } from "../../openapi/article";
 import { checkDuplicateTitle } from "../domain/article";
+import { checkExistCategory } from "../domain/category";
 import {
 	createArticle,
 	deleteArticleById,
@@ -29,8 +30,8 @@ app.openapi(fetchArticleListRoute, async (c) => {
 app.openapi(postArticleRoute, async (c) => {
 	try {
 		const body = c.req.valid("json");
-		checkDuplicateTitle(body.title);
-
+		await checkDuplicateTitle(body.title);
+		await checkExistCategory(body.category);
 		const res = await createArticle(body);
 		return c.json(res);
 	} catch (err) {
@@ -48,6 +49,8 @@ app.openapi(patchArticleRoute, async (c) => {
 	try {
 		const body = c.req.valid("json");
 		const { articleId } = c.req.valid("param");
+		await checkDuplicateTitle(body.title);
+		await checkExistCategory(body.category);
 		await updateArticleById(body, articleId);
 		return c.json({ id: articleId });
 	} catch (error) {
