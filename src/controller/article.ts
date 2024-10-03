@@ -1,58 +1,58 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { OpenAPIHono } from '@hono/zod-openapi'
 import {
 	deleteArticleRoute,
 	fetchArticleListRoute,
 	patchArticleRoute,
 	postArticleRoute,
-} from "../../openapi/article";
-import { domain } from "../domain";
+} from '../../openapi/article'
+import { domain } from '../domain'
 import {
 	createArticle,
 	deleteArticleById,
 	getAllArticles,
 	updateArticleById,
-} from "../repository/article";
-import { handleErrors } from "./error";
+} from '../repository/article'
+import { handleErrors } from './error'
 
-const app = new OpenAPIHono();
+const app = new OpenAPIHono()
 
 app.openapi(fetchArticleListRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const allArticles = await getAllArticles();
-		return ctx.json({ contents: allArticles });
-	}, c);
-});
+		const allArticles = await getAllArticles()
+		return ctx.json({ contents: allArticles })
+	}, c)
+})
 
 app.openapi(postArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const body = ctx.req.valid("json");
-		await domain.article.isUniqueTitle(body.title);
-		await domain.category.exists(body.category);
-		const res = await createArticle(body);
-		return ctx.json(res);
-	}, c);
-});
+		const body = ctx.req.valid('json')
+		await domain.article.isUniqueTitle(body.title)
+		await domain.category.exists(body.category)
+		const res = await createArticle(body)
+		return ctx.json(res)
+	}, c)
+})
 
-type x = keyof typeof postArticleRoute;
+type x = keyof typeof postArticleRoute
 
 app.openapi(patchArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const body = ctx.req.valid("json");
-		const { articleId } = ctx.req.valid("param");
-		await domain.article.exists(articleId);
-		await domain.article.isUniqueTitle(body.title);
-		await domain.category.exists(body.category);
-		await updateArticleById(body, articleId);
-		return ctx.json({ id: articleId });
-	}, c);
-});
+		const body = ctx.req.valid('json')
+		const { articleId } = ctx.req.valid('param')
+		await domain.article.exists(articleId)
+		await domain.article.isUniqueTitle(body.title)
+		await domain.category.exists(body.category)
+		await updateArticleById(body, articleId)
+		return ctx.json({ id: articleId })
+	}, c)
+})
 app.openapi(deleteArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const { articleId } = ctx.req.valid("param");
-		await domain.article.exists(articleId);
-		await deleteArticleById(articleId);
-		return ctx.json({});
-	}, c);
-});
+		const { articleId } = ctx.req.valid('param')
+		await domain.article.exists(articleId)
+		await deleteArticleById(articleId)
+		return ctx.json({})
+	}, c)
+})
 
-export { app as articleApp };
+export { app as articleApp }

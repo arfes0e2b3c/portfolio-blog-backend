@@ -1,7 +1,7 @@
-import { article } from "./article";
-import { category } from "./category";
+import { article } from './article'
+import { category } from './category'
 
 export const domain = {
 	article,
 	category,
-};
+}

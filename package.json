@@ -5,7 +5,8 @@
 		"generate": "drizzle-kit generate",
 		"migrate": "drizzle-kit migrate",
 		"seed": "bun run src/seed/index.ts",
-		"migrate:seed": "bun migrate & bun seed"
+		"migrate:seed": "bun migrate & bun seed",
+		"format": "bunx biome format --write ./src"
 	},
 	"dependencies": {
 		"@hono/swagger-ui": "^0.4.1",
@@ -18,6 +19,7 @@
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.9.3",
 		"@types/bun": "latest",
 		"@types/mysql": "^2.15.26",
 		"drizzle-kit": "^0.24.2"
