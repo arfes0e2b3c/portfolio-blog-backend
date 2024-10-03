@@ -6,20 +6,14 @@ import {
 	patchCategoryRoute,
 	postCategoryRoute,
 } from '../../openapi/category'
-import { domain } from '../domain'
-import {
-	createCategory,
-	deleteCategoryById,
-	getAllCategories,
-	updateCategoryById,
-} from '../repository/category'
+import { svc } from '../service'
 import { handleErrors } from './error'
 
 const app = new OpenAPIHono()
 
 app.openapi(fetchCategoryListRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const allCategories = await getAllCategories()
+		const allCategories = await svc.category.getAll()
 		return ctx.json({ contents: allCategories })
 	}, c)
 })
@@ -27,8 +21,7 @@ app.openapi(fetchCategoryListRoute, async (c) => {
 app.openapi(postCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid('json')
-		await domain.category.isUniqueName(body.name)
-		const res = await createCategory(body)
+		const res = await svc.category.create(body)
 		return ctx.json(res)
 	}, c)
 })
@@ -37,19 +30,16 @@ app.openapi(patchCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid('json')
 		const { categoryId } = ctx.req.valid('param')
-		await domain.category.exists(categoryId)
-		await domain.category.isUniqueName(body.name)
-		await updateCategoryById(body, categoryId)
-		return ctx.json({ id: categoryId })
+		const res = await svc.category.updateById(body, categoryId)
+		return ctx.json(res)
 	}, c)
 })
 
 app.openapi(deleteCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const { categoryId } = ctx.req.valid('param')
-		await domain.category.exists(categoryId)
-		await deleteCategoryById(categoryId)
-		return ctx.json({})
+		const res = await svc.category.deleteById(categoryId)
+		return ctx.json(res)
 	}, c)
 })
 

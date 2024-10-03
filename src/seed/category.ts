@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { SeedDb } from '.'
-import { categoriesTable } from '../schema'
+import { categoriesTable } from '../db/schema'
 
 export const seedCategories = async () => {
 	await SeedDb.insert(categoriesTable)
@@ -11,8 +11,12 @@ export const seedCategories = async () => {
 			{ name: '仕事' },
 			{ name: 'その他' },
 		])
-		.onDuplicateKeyUpdate({
-			set: { name: sql`name`, updatedAt: sql`updated_at` },
+		.onConflictDoUpdate({
+			target: categoriesTable.id,
+			set: {
+				name: sql`${categoriesTable.name}`,
+				updatedAt: sql`${categoriesTable.updatedAt}`,
+			},
 		})
 
 	console.log('Categories seeded.')

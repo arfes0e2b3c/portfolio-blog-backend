@@ -1,47 +1,63 @@
-import { eq, sql } from 'drizzle-orm'
+import { sql } from 'drizzle-orm'
 import type { ArticleInputSchema } from '../../openapi/article'
-import { db } from '../db'
-import { articlesTable } from '../schema'
+import { db } from '../db/db'
+import { articlesTable } from '../db/schema'
 
-export const getAllArticles = async () => {
-	return await db
-		.select()
-		.from(articlesTable)
-		.where(sql`${articlesTable.deletedAt} IS NULL`)
+class ArticleRepository {
+	async getAll() {
+		return await db
+			.select()
+			.from(articlesTable)
+			.where(sql`${articlesTable.deletedAt} IS NULL`)
+	}
+
+	async findByTitle(title: string) {
+		return await db
+			.select()
+			.from(articlesTable)
+			.where(
+				sql`${articlesTable.title} = ${title} and ${articlesTable.deletedAt} IS NULL`
+			)
+	}
+
+	async findById(articleId: string) {
+		return await db
+			.select()
+			.from(articlesTable)
+			.where(
+				sql`${articlesTable.id} = ${articleId} and ${articlesTable.deletedAt} IS NULL`
+			)
+	}
+
+	async create(body: ArticleInputSchema) {
+		const res = await db
+			.insert(articlesTable)
+			.values(body)
+			.returning({ id: articlesTable.id })
+		return res[0]
+	}
+
+	async updateById(body: ArticleInputSchema, articleId: string) {
+		const res = await db
+			.update(articlesTable)
+			.set({ updatedAt: sql`NOW()`, ...body })
+			.where(
+				sql`${articlesTable.id} = ${articleId} and ${articlesTable.deletedAt} IS NULL`
+			)
+			.returning({ id: articlesTable.id })
+		return res[0]
+	}
+
+	async deleteById(articleId: string) {
+		const res = await db
+			.update(articlesTable)
+			.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
+			.where(
+				sql`${articlesTable.id} = ${articleId} and ${articlesTable.deletedAt} IS NULL`
+			)
+			.returning({ id: articlesTable.id })
+		return res[0]
+	}
 }
 
-export const findArticleByTitle = async (title: string) => {
-	return await db
-		.select()
-		.from(articlesTable)
-		.where(eq(articlesTable.title, title))
-}
-
-export const findArticleById = async (articleId: string) => {
-	return await db
-		.select()
-		.from(articlesTable)
-		.where(eq(articlesTable.id, articleId))
-}
-
-export const createArticle = async (body: ArticleInputSchema) => {
-	const res = await db.insert(articlesTable).values(body).$returningId()
-	return res[0]
-}
-
-export const updateArticleById = async (
-	body: ArticleInputSchema,
-	articleId: string
-) => {
-	return await db
-		.update(articlesTable)
-		.set({ updatedAt: sql`NOW()`, ...body })
-		.where(eq(articlesTable.id, articleId))
-}
-
-export const deleteArticleById = async (articleId: string) => {
-	return await db
-		.update(articlesTable)
-		.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
-		.where(eq(articlesTable.id, articleId))
-}
+export const articleRepo = new ArticleRepository()

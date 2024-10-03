@@ -1,15 +1,8 @@
 import { sql } from 'drizzle-orm'
-import {
-	boolean,
-	mysqlTable,
-	serial,
-	text,
-	timestamp,
-	varchar,
-} from 'drizzle-orm/mysql-core'
+import { boolean, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 import { ulid } from 'ulid'
 
-export const articlesTable = mysqlTable('articles', {
+export const articlesTable = pgTable('articles', {
 	id: varchar('id', { length: 26 })
 		.notNull()
 		.primaryKey()
@@ -32,7 +25,7 @@ export const articlesTable = mysqlTable('articles', {
 	deletedAt: timestamp('deleted_at').default(sql`NULL`),
 })
 
-export const categoriesTable = mysqlTable('categories', {
+export const categoriesTable = pgTable('categories', {
 	id: varchar('id', { length: 26 })
 		.notNull()
 		.primaryKey()

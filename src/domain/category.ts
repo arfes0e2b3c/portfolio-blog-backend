@@ -1,25 +1,24 @@
 import { HTTPException } from 'hono/http-exception'
-import { findCategoryById, findCategoryByName } from '../repository/category'
+import { repo } from '../repository'
 
-const isUniqueName = async (name: string) => {
-	const existingCategory = await findCategoryByName(name)
-	if (existingCategory.length > 0) {
-		throw new HTTPException(400, {
-			message: 'A category with the same name already exists',
-		})
+class CategoryDomain {
+	async isUniqueName(name: string) {
+		const existingCategory = await repo.category.findByName(name)
+		if (existingCategory.length > 0) {
+			throw new HTTPException(400, {
+				message: 'A category with the same name already exists',
+			})
+		}
+	}
+
+	async exists(categoryId: string) {
+		const existingCategory = await repo.category.findById(categoryId)
+		if (existingCategory.length === 0) {
+			throw new HTTPException(400, {
+				message: 'The specified category does not exist',
+			})
+		}
 	}
 }
 
-const exists = async (categoryId: string) => {
-	const existingCategory = await findCategoryById(categoryId)
-	if (existingCategory.length === 0) {
-		throw new HTTPException(400, {
-			message: 'The specified category does not exist',
-		})
-	}
-}
-
-export const category = {
-	isUniqueName,
-	exists,
-}
+export const categoryDomain = new CategoryDomain()
