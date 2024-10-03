@@ -25,22 +25,27 @@ const findById = async (articleId: string) => {
 }
 
 const create = async (body: ArticleInputSchema) => {
-	const res = await db.insert(articlesTable).values(body).$returningId()
+	const res = await db
+		.insert(articlesTable)
+		.values(body)
+		.returning({ id: articlesTable.id })
 	return res[0]
 }
 
 const updateById = async (body: ArticleInputSchema, articleId: string) => {
-	return await db
+	const res = await db
 		.update(articlesTable)
 		.set({ updatedAt: sql`NOW()`, ...body })
-		.where(eq(articlesTable.id, articleId))
+		.returning({ id: articlesTable.id })
+	return res[0]
 }
 
 const deleteById = async (articleId: string) => {
-	return await db
+	const res = await db
 		.update(articlesTable)
 		.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
-		.where(eq(articlesTable.id, articleId))
+		.returning({ id: articlesTable.id })
+	return res[0]
 }
 
 export const articleRepo = {

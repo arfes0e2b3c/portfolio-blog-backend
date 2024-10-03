@@ -25,22 +25,27 @@ const findById = async (categoryId: string) => {
 }
 
 const create = async (body: CategoryInputSchema) => {
-	const res = await db.insert(categoriesTable).values(body).$returningId()
+	const res = await db
+		.insert(categoriesTable)
+		.values(body)
+		.returning({ id: categoriesTable.id })
 	return res[0]
 }
 
 const updateById = async (body: CategoryInputSchema, categoryId: string) => {
-	return await db
+	const res = await db
 		.update(categoriesTable)
 		.set({ updatedAt: sql`NOW()`, ...body })
-		.where(eq(categoriesTable.id, categoryId))
+		.returning({ id: categoriesTable.id })
+	return res[0]
 }
 
 const deleteById = async (categoryId: string) => {
-	return await db
+	const res = await db
 		.update(categoriesTable)
 		.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
-		.where(eq(categoriesTable.id, categoryId))
+		.returning({ id: categoriesTable.id })
+	return res[0]
 }
 
 export const categoryRepo = {

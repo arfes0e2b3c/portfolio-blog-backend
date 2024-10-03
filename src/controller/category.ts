@@ -30,16 +30,16 @@ app.openapi(patchCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid('json')
 		const { categoryId } = ctx.req.valid('param')
-		await svc.category.updateById(body, categoryId)
-		return ctx.json({ id: categoryId })
+		const res = await svc.category.updateById(body, categoryId)
+		return ctx.json(res)
 	}, c)
 })
 
 app.openapi(deleteCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const { categoryId } = ctx.req.valid('param')
-		await svc.category.deleteById(categoryId)
-		return ctx.json({})
+		const res = await svc.category.deleteById(categoryId)
+		return ctx.json(res)
 	}, c)
 })
 

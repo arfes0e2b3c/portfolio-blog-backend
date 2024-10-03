@@ -30,16 +30,16 @@ app.openapi(patchArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid('json')
 		const { articleId } = ctx.req.valid('param')
-		await svc.article.updateById(body, articleId)
-		return ctx.json({ id: articleId })
+		const res = await svc.article.updateById(body, articleId)
+		return ctx.json(res)
 	}, c)
 })
 
 app.openapi(deleteArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const { articleId } = ctx.req.valid('param')
-		await svc.article.deleteById(articleId)
-		return ctx.json({})
+		const res = await svc.article.deleteById(articleId)
+		return ctx.json(res)
 	}, c)
 })
 
