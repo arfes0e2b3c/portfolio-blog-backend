@@ -6,7 +6,7 @@ import {
 	patchCategoryRoute,
 	postCategoryRoute,
 } from "../../openapi/category";
-import { checkDuplicateName } from "../domain/category";
+import { domain } from "../domain";
 import {
 	createCategory,
 	deleteCategoryById,
@@ -27,7 +27,7 @@ app.openapi(fetchCategoryListRoute, async (c) => {
 app.openapi(postCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid("json");
-		await checkDuplicateName(body.name);
+		await domain.category.checkDuplicateName(body.name);
 		const res = await createCategory(body);
 		return ctx.json(res);
 	}, c);

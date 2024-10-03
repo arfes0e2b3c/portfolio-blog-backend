@@ -5,8 +5,7 @@ import {
 	patchArticleRoute,
 	postArticleRoute,
 } from "../../openapi/article";
-import { checkDuplicateTitle } from "../domain/article";
-import { checkExistCategory } from "../domain/category";
+import { domain } from "../domain";
 import {
 	createArticle,
 	deleteArticleById,
@@ -27,8 +26,8 @@ app.openapi(fetchArticleListRoute, async (c) => {
 app.openapi(postArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid("json");
-		await checkDuplicateTitle(body.title);
-		await checkExistCategory(body.category);
+		await domain.article.checkDuplicateTitle(body.title);
+		await domain.category.checkExistCategory(body.category);
 		const res = await createArticle(body);
 		return ctx.json(res);
 	}, c);
@@ -40,8 +39,9 @@ app.openapi(patchArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid("json");
 		const { articleId } = ctx.req.valid("param");
-		await checkDuplicateTitle(body.title);
-		await checkExistCategory(body.category);
+		await domain.article.checkExistArticle(articleId);
+		await domain.article.checkDuplicateTitle(body.title);
+		await domain.category.checkExistCategory(body.category);
 		await updateArticleById(body, articleId);
 		return ctx.json({ id: articleId });
 	}, c);
