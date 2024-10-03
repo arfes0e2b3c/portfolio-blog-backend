@@ -1,7 +1,7 @@
 import { eq, sql } from 'drizzle-orm'
 import type { CategoryInputSchema } from '../../openapi/category'
-import { db } from '../db'
-import { categoriesTable } from '../schema'
+import { db } from '../db/db'
+import { categoriesTable } from '../db/schema'
 
 export const getAllCategories = async () => {
 	return await db

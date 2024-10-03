@@ -1,7 +1,7 @@
 import { eq, sql } from 'drizzle-orm'
 import type { ArticleInputSchema } from '../../openapi/article'
-import { db } from '../db'
-import { articlesTable } from '../schema'
+import { db } from '../db/db'
+import { articlesTable } from '../db/schema'
 
 export const getAllArticles = async () => {
 	return await db

@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { SeedDb } from '.'
-import { categoriesTable } from '../schema'
+import { categoriesTable } from '../db/schema'
 
 export const seedCategories = async () => {
 	await SeedDb.insert(categoriesTable)
