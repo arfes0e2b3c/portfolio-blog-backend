@@ -1,8 +1,8 @@
 import { HTTPException } from 'hono/http-exception'
-import { findArticleById, findArticleByTitle } from '../repository/article'
+import { repo } from '../repository'
 
 const isUniqueTitle = async (title: string) => {
-	const existingArticle = await findArticleByTitle(title)
+	const existingArticle = await repo.article.findByTitle(title)
 	if (existingArticle.length > 0) {
 		throw new HTTPException(400, {
 			message: 'An article with the same title already exists',
@@ -11,7 +11,7 @@ const isUniqueTitle = async (title: string) => {
 }
 
 const exists = async (articleId: string) => {
-	const existingArticle = await findArticleById(articleId)
+	const existingArticle = await repo.article.findById(articleId)
 	if (existingArticle.length === 0) {
 		throw new HTTPException(400, {
 			message: 'The specified article does not exist',

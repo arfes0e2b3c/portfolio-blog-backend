@@ -3,45 +3,51 @@ import type { ArticleInputSchema } from '../../openapi/article'
 import { db } from '../db/db'
 import { articlesTable } from '../db/schema'
 
-export const getAllArticles = async () => {
+const getAll = async () => {
 	return await db
 		.select()
 		.from(articlesTable)
 		.where(sql`${articlesTable.deletedAt} IS NULL`)
 }
 
-export const findArticleByTitle = async (title: string) => {
+const findByTitle = async (title: string) => {
 	return await db
 		.select()
 		.from(articlesTable)
 		.where(eq(articlesTable.title, title))
 }
 
-export const findArticleById = async (articleId: string) => {
+const findById = async (articleId: string) => {
 	return await db
 		.select()
 		.from(articlesTable)
 		.where(eq(articlesTable.id, articleId))
 }
 
-export const createArticle = async (body: ArticleInputSchema) => {
+const create = async (body: ArticleInputSchema) => {
 	const res = await db.insert(articlesTable).values(body).$returningId()
 	return res[0]
 }
 
-export const updateArticleById = async (
-	body: ArticleInputSchema,
-	articleId: string
-) => {
+const updateById = async (body: ArticleInputSchema, articleId: string) => {
 	return await db
 		.update(articlesTable)
 		.set({ updatedAt: sql`NOW()`, ...body })
 		.where(eq(articlesTable.id, articleId))
 }
 
-export const deleteArticleById = async (articleId: string) => {
+const deleteById = async (articleId: string) => {
 	return await db
 		.update(articlesTable)
 		.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
 		.where(eq(articlesTable.id, articleId))
+}
+
+export const articleRepo = {
+	getAll,
+	findByTitle,
+	findById,
+	create,
+	updateById,
+	deleteById,
 }
