@@ -33,8 +33,6 @@ app.openapi(postArticleRoute, async (c) => {
 	}, c)
 })
 
-type x = keyof typeof postArticleRoute
-
 app.openapi(patchArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid('json')
@@ -46,6 +44,7 @@ app.openapi(patchArticleRoute, async (c) => {
 		return ctx.json({ id: articleId })
 	}, c)
 })
+
 app.openapi(deleteArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const { articleId } = ctx.req.valid('param')
