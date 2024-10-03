@@ -14,14 +14,18 @@ const findByTitle = async (title: string) => {
 	return await db
 		.select()
 		.from(articlesTable)
-		.where(eq(articlesTable.title, title))
+		.where(
+			sql`${articlesTable.title} = ${title} and ${articlesTable.deletedAt} IS NULL`
+		)
 }
 
 const findById = async (articleId: string) => {
 	return await db
 		.select()
 		.from(articlesTable)
-		.where(eq(articlesTable.id, articleId))
+		.where(
+			sql`${articlesTable.id} = ${articleId} and ${articlesTable.deletedAt} IS NULL`
+		)
 }
 
 const create = async (body: ArticleInputSchema) => {
@@ -36,6 +40,9 @@ const updateById = async (body: ArticleInputSchema, articleId: string) => {
 	const res = await db
 		.update(articlesTable)
 		.set({ updatedAt: sql`NOW()`, ...body })
+		.where(
+			sql`${articlesTable.id} = ${articleId} and ${articlesTable.deletedAt} IS NULL`
+		)
 		.returning({ id: articlesTable.id })
 	return res[0]
 }
@@ -44,6 +51,9 @@ const deleteById = async (articleId: string) => {
 	const res = await db
 		.update(articlesTable)
 		.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
+		.where(
+			sql`${articlesTable.id} = ${articleId} and ${articlesTable.deletedAt} IS NULL`
+		)
 		.returning({ id: articlesTable.id })
 	return res[0]
 }
