@@ -1,56 +1,56 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-import { HTTPException } from "hono/http-exception";
+import { OpenAPIHono } from '@hono/zod-openapi'
+import { HTTPException } from 'hono/http-exception'
 import {
 	deleteCategoryRoute,
 	fetchCategoryListRoute,
 	patchCategoryRoute,
 	postCategoryRoute,
-} from "../../openapi/category";
-import { domain } from "../domain";
+} from '../../openapi/category'
+import { domain } from '../domain'
 import {
 	createCategory,
 	deleteCategoryById,
 	getAllCategories,
 	updateCategoryById,
-} from "../repository/category";
-import { handleErrors } from "./error";
+} from '../repository/category'
+import { handleErrors } from './error'
 
-const app = new OpenAPIHono();
+const app = new OpenAPIHono()
 
 app.openapi(fetchCategoryListRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const allCategories = await getAllCategories();
-		return ctx.json({ contents: allCategories });
-	}, c);
-});
+		const allCategories = await getAllCategories()
+		return ctx.json({ contents: allCategories })
+	}, c)
+})
 
 app.openapi(postCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const body = ctx.req.valid("json");
-		await domain.category.isUniqueName(body.name);
-		const res = await createCategory(body);
-		return ctx.json(res);
-	}, c);
-});
+		const body = ctx.req.valid('json')
+		await domain.category.isUniqueName(body.name)
+		const res = await createCategory(body)
+		return ctx.json(res)
+	}, c)
+})
 
 app.openapi(patchCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const body = ctx.req.valid("json");
-		const { categoryId } = ctx.req.valid("param");
-		await domain.category.exists(categoryId);
-		await domain.category.isUniqueName(body.name);
-		await updateCategoryById(body, categoryId);
-		return ctx.json({ id: categoryId });
-	}, c);
-});
+		const body = ctx.req.valid('json')
+		const { categoryId } = ctx.req.valid('param')
+		await domain.category.exists(categoryId)
+		await domain.category.isUniqueName(body.name)
+		await updateCategoryById(body, categoryId)
+		return ctx.json({ id: categoryId })
+	}, c)
+})
 
 app.openapi(deleteCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const { categoryId } = ctx.req.valid("param");
-		await domain.category.exists(categoryId);
-		await deleteCategoryById(categoryId);
-		return ctx.json({});
-	}, c);
-});
+		const { categoryId } = ctx.req.valid('param')
+		await domain.category.exists(categoryId)
+		await deleteCategoryById(categoryId)
+		return ctx.json({})
+	}, c)
+})
 
-export { app as categoryApp };
+export { app as categoryApp }
