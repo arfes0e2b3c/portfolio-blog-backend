@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["bun", "run", "--hot", "src/api/index.ts"]
+CMD ["bun", "run", "--hot", "src/controller/index.ts"]
