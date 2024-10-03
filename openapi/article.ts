@@ -26,6 +26,8 @@ const ArticleInputSchema = z.object({
 	isPublished: z.boolean(),
 });
 
+export type ArticleInputSchema = z.infer<typeof ArticleInputSchema>;
+
 export const fetchArticleListRoute = createRoute({
 	path: "/",
 	method: "get",
