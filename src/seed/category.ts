@@ -11,8 +11,12 @@ export const seedCategories = async () => {
 			{ name: '仕事' },
 			{ name: 'その他' },
 		])
-		.onDuplicateKeyUpdate({
-			set: { name: sql`name`, updatedAt: sql`updated_at` },
+		.onConflictDoUpdate({
+			target: categoriesTable.id,
+			set: {
+				name: sql`${categoriesTable.name}`,
+				updatedAt: sql`${categoriesTable.updatedAt}`,
+			},
 		})
 
 	console.log('Categories seeded.')

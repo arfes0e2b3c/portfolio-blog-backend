@@ -1,16 +1,17 @@
-import { drizzle } from 'drizzle-orm/mysql2'
-import * as mysql from 'mysql2/promise'
-import { seedCategories } from './category'
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { Pool } from 'pg'
 import { seedArticles } from './article'
+import { seedCategories } from './category'
 
-export const SeedPool = mysql.createPool({
+const client = new Pool({
 	host: 'localhost',
 	user: 'root',
 	password: 'password',
+	port: 5432,
 	database: 'testdb',
 })
 
-export const SeedDb = drizzle(SeedPool)
+export const SeedDb = drizzle(client)
 
 const seed = async () => {
 	await seedCategories()
@@ -25,5 +26,5 @@ seed()
 		console.error('Error seeding data:', error)
 	})
 	.finally(() => {
-		SeedPool.end()
+		client.end()
 	})

@@ -9,11 +9,12 @@ services:
     depends_on: 
       - db
     volumes:
-      - ./:/app  # ホストのカレントディレクトリをコンテナの /app にマウント
+      - ./:/app 
   db:
-    image: mysql:8.0
+    image: postgres:15.2  
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: testdb
+      POSTGRES_USER: root  
+      POSTGRES_PASSWORD: password  
+      POSTGRES_DB: testdb 
     ports: 
-      - "3306:3306"
+      - "5432:5432"  

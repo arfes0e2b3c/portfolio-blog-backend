@@ -1,12 +1,14 @@
-import { defineConfig } from "drizzle-kit";
+import { defineConfig } from 'drizzle-kit'
 export default defineConfig({
-	dialect: "mysql",
-	schema: "./src/schema.ts",
-	out: "./drizzle",
+	dialect: 'postgresql',
+	schema: './src/db/schema.ts',
+	out: './drizzle',
 	dbCredentials: {
-		host: "localhost",
-		user: "root",
-		password: "password",
-		database: "testdb",
+		ssl: false,
+		host: 'localhost',
+		user: 'root',
+		password: 'password',
+		database: 'testdb',
+		port: 5432,
 	},
-});
+})
