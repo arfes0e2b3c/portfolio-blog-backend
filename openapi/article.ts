@@ -5,10 +5,10 @@ const ArticleSchema = z.object({
 	contents: z.array(
 		z.object({
 			id: zString("01J8F3RR15SSSVV2F3AGMJ4ZE7"),
-			title: zString("タイトル"),
+			title: zString("タイトル").max(255),
 			content: zString("本文").nullable(),
 			draftContent: zString("下書き").nullable(),
-			category: zString("ej2iiz33-ipq").nullable(),
+			category: zString("01J8KPNPB3KMA361MQAJDDT43F").nullable(),
 			isPublished: z.boolean().default(false),
 			createdAt: zString("2024-09-23 07:57:06").datetime(),
 			updatedAt: zString("2024-09-23 07:57:06").datetime(),
@@ -19,12 +19,14 @@ const ArticleSchema = z.object({
 });
 
 const ArticleInputSchema = z.object({
-	title: zString("タイトル"),
+	title: zString("タイトル").max(255),
 	content: zString("本文"),
 	draftContent: zString("下書き"),
-	category: zString("ej2iiz33-ipq"),
+	category: zString("01J8KPNPB3KMA361MQAJDDT43F"),
 	isPublished: z.boolean(),
 });
+
+export type ArticleInputSchema = z.infer<typeof ArticleInputSchema>;
 
 export const fetchArticleListRoute = createRoute({
 	path: "/",
