@@ -1,7 +1,7 @@
 import { HTTPException } from "hono/http-exception";
 import { findCategoryById, findCategoryByName } from "../repository/category";
 
-const checkDuplicateName = async (name: string) => {
+const isUniqueName = async (name: string) => {
 	const existingCategory = await findCategoryByName(name);
 	if (existingCategory.length > 0) {
 		throw new HTTPException(400, {
@@ -10,7 +10,7 @@ const checkDuplicateName = async (name: string) => {
 	}
 };
 
-const checkExistCategory = async (categoryId: string) => {
+const exists = async (categoryId: string) => {
 	const existingCategory = await findCategoryById(categoryId);
 	if (existingCategory.length === 0) {
 		throw new HTTPException(400, {
@@ -20,6 +20,6 @@ const checkExistCategory = async (categoryId: string) => {
 };
 
 export const category = {
-	checkDuplicateName,
-	checkExistCategory,
+	isUniqueName,
+	exists,
 };

@@ -1,7 +1,7 @@
 import { HTTPException } from "hono/http-exception";
-import { findArticleByTitle } from "../repository/article";
+import { findArticleById, findArticleByTitle } from "../repository/article";
 
-const checkDuplicateTitle = async (title: string) => {
+const isUniqueTitle = async (title: string) => {
 	const existingArticle = await findArticleByTitle(title);
 	if (existingArticle.length > 0) {
 		throw new HTTPException(400, {
@@ -10,7 +10,16 @@ const checkDuplicateTitle = async (title: string) => {
 	}
 };
 
+const exists = async (articleId: string) => {
+	const existingArticle = await findArticleById(articleId);
+	if (existingArticle.length === 0) {
+		throw new HTTPException(400, {
+			message: "The specified article does not exist",
+		});
+	}
+};
+
 export const article = {
-	checkDuplicateTitle,
-	checkExistArticle,
+	isUniqueTitle,
+	exists,
 };

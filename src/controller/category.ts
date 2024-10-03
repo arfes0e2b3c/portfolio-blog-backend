@@ -27,7 +27,7 @@ app.openapi(fetchCategoryListRoute, async (c) => {
 app.openapi(postCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid("json");
-		await domain.category.checkDuplicateName(body.name);
+		await domain.category.isUniqueName(body.name);
 		const res = await createCategory(body);
 		return ctx.json(res);
 	}, c);
@@ -37,6 +37,8 @@ app.openapi(patchCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid("json");
 		const { categoryId } = ctx.req.valid("param");
+		await domain.category.exists(categoryId);
+		await domain.category.isUniqueName(body.name);
 		await updateCategoryById(body, categoryId);
 		return ctx.json({ id: categoryId });
 	}, c);
@@ -45,6 +47,7 @@ app.openapi(patchCategoryRoute, async (c) => {
 app.openapi(deleteCategoryRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const { categoryId } = ctx.req.valid("param");
+		await domain.category.exists(categoryId);
 		await deleteCategoryById(categoryId);
 		return ctx.json({});
 	}, c);

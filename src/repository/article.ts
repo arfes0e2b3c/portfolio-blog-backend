@@ -17,6 +17,13 @@ export const findArticleByTitle = async (title: string) => {
 		.where(eq(articlesTable.title, title));
 };
 
+export const findArticleById = async (articleId: string) => {
+	return await db
+		.select()
+		.from(articlesTable)
+		.where(eq(articlesTable.id, articleId));
+};
+
 export const createArticle = async (body: ArticleInputSchema) => {
 	const res = await db.insert(articlesTable).values(body).$returningId();
 	return res[0];
