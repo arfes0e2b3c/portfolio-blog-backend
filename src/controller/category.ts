@@ -13,47 +13,41 @@ import {
 	getAllCategories,
 	updateCategoryById,
 } from "../repository/category";
+import { handleErrors } from "./error";
 
 const app = new OpenAPIHono();
 
 app.openapi(fetchCategoryListRoute, async (c) => {
-	try {
+	return handleErrors(async (ctx) => {
 		const allCategories = await getAllCategories();
-		return c.json({ contents: allCategories });
-	} catch (error) {
-		console.error("Database Error:", error);
-		throw new HTTPException(500, { message: "Failed to fetch categories" });
-	}
+		return ctx.json({ contents: allCategories });
+	}, c);
 });
 
 app.openapi(postCategoryRoute, async (c) => {
-	try {
-		const body = c.req.valid("json");
+	return handleErrors(async (ctx) => {
+		const body = ctx.req.valid("json");
 		await checkDuplicateName(body.name);
 		const res = await createCategory(body);
-		return c.json(res);
-	} catch (error) {
-		if (error instanceof HTTPException) {
-			throw error;
-		}
-		console.error("Error in postCategoryRoute:", error);
-		throw new HTTPException(500, {
-			message: "An unexpected error occurred while posting the category",
-		});
-	}
+		return ctx.json(res);
+	}, c);
 });
 
 app.openapi(patchCategoryRoute, async (c) => {
-	const body = c.req.valid("json");
-	const { categoryId } = c.req.valid("param");
-	await updateCategoryById(body, categoryId);
-	return c.json({ id: categoryId });
+	return handleErrors(async (ctx) => {
+		const body = ctx.req.valid("json");
+		const { categoryId } = ctx.req.valid("param");
+		await updateCategoryById(body, categoryId);
+		return ctx.json({ id: categoryId });
+	}, c);
 });
 
 app.openapi(deleteCategoryRoute, async (c) => {
-	const { categoryId } = c.req.valid("param");
-	await deleteCategoryById(categoryId);
-	return c.json({});
+	return handleErrors(async (ctx) => {
+		const { categoryId } = ctx.req.valid("param");
+		await deleteCategoryById(categoryId);
+		return ctx.json({});
+	}, c);
 });
 
 export { app as categoryApp };

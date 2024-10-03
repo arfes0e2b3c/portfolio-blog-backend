@@ -1,5 +1,4 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { HTTPException } from "hono/http-exception";
 import {
 	deleteArticleRoute,
 	fetchArticleListRoute,
@@ -14,64 +13,45 @@ import {
 	getAllArticles,
 	updateArticleById,
 } from "../repository/article";
+import { handleErrors } from "./error";
 
 const app = new OpenAPIHono();
 
 app.openapi(fetchArticleListRoute, async (c) => {
-	try {
+	return handleErrors(async (ctx) => {
 		const allArticles = await getAllArticles();
-		return c.json({ contents: allArticles });
-	} catch (err) {
-		console.error("Database Error:", err);
-		throw new HTTPException(500, { message: "Failed to fetch articles" });
-	}
+		return ctx.json({ contents: allArticles });
+	}, c);
 });
 
 app.openapi(postArticleRoute, async (c) => {
-	try {
-		const body = c.req.valid("json");
+	return handleErrors(async (ctx) => {
+		const body = ctx.req.valid("json");
 		await checkDuplicateTitle(body.title);
 		await checkExistCategory(body.category);
 		const res = await createArticle(body);
-		return c.json(res);
-	} catch (err) {
-		if (err instanceof HTTPException) {
-			throw err;
-		}
-		console.error("Error in postArticleRoute:", err);
-		throw new HTTPException(500, {
-			message: "An unexpected error occurred while posting the article",
-		});
-	}
+		return ctx.json(res);
+	}, c);
 });
 
+type x = keyof typeof postArticleRoute;
+
 app.openapi(patchArticleRoute, async (c) => {
-	try {
-		const body = c.req.valid("json");
-		const { articleId } = c.req.valid("param");
+	return handleErrors(async (ctx) => {
+		const body = ctx.req.valid("json");
+		const { articleId } = ctx.req.valid("param");
 		await checkDuplicateTitle(body.title);
 		await checkExistCategory(body.category);
 		await updateArticleById(body, articleId);
-		return c.json({ id: articleId });
-	} catch (error) {
-		console.error("Error in patchArticleRoute:", error);
-		throw new HTTPException(500, {
-			message: "An unexpected error occurred while patching the article	",
-		});
-	}
+		return ctx.json({ id: articleId });
+	}, c);
 });
-
 app.openapi(deleteArticleRoute, async (c) => {
-	try {
-		const { articleId } = c.req.valid("param");
+	return handleErrors(async (ctx) => {
+		const { articleId } = ctx.req.valid("param");
 		await deleteArticleById(articleId);
-		return c.json({});
-	} catch (error) {
-		console.error("Error in deleteArticleRoute:", error);
-		throw new HTTPException(500, {
-			message: "An unexpected error occurred while deleting the article",
-		});
-	}
+		return ctx.json({});
+	}, c);
 });
 
 export { app as articleApp };
