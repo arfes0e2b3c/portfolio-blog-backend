@@ -2,10 +2,13 @@ import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { handle } from 'hono/vercel'
 import { articleApp } from '../src/controller/article'
 import { categoryApp } from '../src/controller/category'
 
-const app = new Hono()
+export const runtime = 'edge'
+
+const app = new Hono().basePath('/api')
 
 app.onError((err, c) => {
 	if (err instanceof HTTPException) {
@@ -34,4 +37,4 @@ app.get(
 	})
 )
 
-export default app
+export default handle(app)

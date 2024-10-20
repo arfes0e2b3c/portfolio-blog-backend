@@ -25,6 +25,7 @@
     "@types/mysql": "^2.15.26",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.24.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vercel": "^37.11.0"
   }
 }
