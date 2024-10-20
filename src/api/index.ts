@@ -1,10 +1,11 @@
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
+import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { articleApp } from './article'
 import { categoryApp } from './category'
 
-const app = new OpenAPIHono()
+const app = new Hono()
 
 app.onError((err, c) => {
 	if (err instanceof HTTPException) {
@@ -18,13 +19,13 @@ app.onError((err, c) => {
 app.route('/articles', articleApp)
 app.route('/categories', categoryApp)
 
-app.doc31('/doc', {
-	openapi: '3.1.0',
-	info: {
-		title: 'api',
-		version: '1.0.0',
-	},
-})
+// app.doc31('/doc', {
+// 	openapi: '3.1.0',
+// 	info: {
+// 		title: 'api',
+// 		version: '1.0.0',
+// 	},
+// })
 
 app.get(
 	'/ui',
