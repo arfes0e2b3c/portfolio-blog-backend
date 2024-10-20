@@ -1,17 +1,10 @@
 {
 	"compilerOptions": {
-		"strict": true,
-		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx",
-		"target": "es2020",
-		"module": "commonjs",
+		"target": "ESNext",
+		"module": "ESNext",
 		"moduleResolution": "node",
 		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
 		"skipLibCheck": true,
-		"outDir": "./dist",
-		"allowSyntheticDefaultImports": true
-	},
-	"include": ["src/**/*", "api/index.ts"],
-	"exclude": ["node_modules"]
+		"strict": true
+	}
 }
