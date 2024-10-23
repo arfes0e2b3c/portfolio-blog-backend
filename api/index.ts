@@ -1,8 +1,6 @@
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import { handle } from 'hono/vercel'
 import { articleApp } from '../src/controller/article'
 import { categoryApp } from '../src/controller/category'
 
@@ -37,4 +35,4 @@ app.get(
 	})
 )
 
-export default handle(app)
+export default app
