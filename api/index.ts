@@ -4,9 +4,7 @@ import { HTTPException } from 'hono/http-exception'
 import { articleApp } from '../src/controller/article'
 import { categoryApp } from '../src/controller/category'
 
-export const runtime = 'edge'
-
-const app = new Hono().basePath('/api')
+const app = new OpenAPIHono().basePath('/api')
 
 app.onError((err, c) => {
 	if (err instanceof HTTPException) {
@@ -20,13 +18,13 @@ app.onError((err, c) => {
 app.route('/articles', articleApp)
 app.route('/categories', categoryApp)
 
-// app.doc31('/doc', {
-// 	openapi: '3.1.0',
-// 	info: {
-// 		title: 'api',
-// 		version: '1.0.0',
-// 	},
-// })
+app.doc31('/doc', {
+	openapi: '3.1.0',
+	info: {
+		title: 'api',
+		version: '1.0.0',
+	},
+})
 
 app.get(
 	'/ui',
