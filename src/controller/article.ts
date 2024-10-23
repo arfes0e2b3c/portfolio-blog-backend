@@ -12,8 +12,7 @@ const app = new OpenAPIHono()
 
 app.openapi(fetchArticleListRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const allArticles = await svc.article.getAll()
-
+		const allArticles = await svc.article.getAll(ctx)
 		return ctx.json({ contents: allArticles })
 	}, c)
 })
@@ -21,7 +20,7 @@ app.openapi(fetchArticleListRoute, async (c) => {
 app.openapi(postArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid('json')
-		const res = await svc.article.create(body)
+		const res = await svc.article.create(ctx, body)
 		return ctx.json(res)
 	}, c)
 })
@@ -30,7 +29,7 @@ app.openapi(patchArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const body = ctx.req.valid('json')
 		const { articleId } = ctx.req.valid('param')
-		const res = await svc.article.updateById(body, articleId)
+		const res = await svc.article.updateById(ctx, body, articleId)
 		return ctx.json(res)
 	}, c)
 })
@@ -38,7 +37,7 @@ app.openapi(patchArticleRoute, async (c) => {
 app.openapi(deleteArticleRoute, async (c) => {
 	return handleErrors(async (ctx) => {
 		const { articleId } = ctx.req.valid('param')
-		const res = await svc.article.deleteById(articleId)
+		const res = await svc.article.deleteById(ctx, articleId)
 		return ctx.json(res)
 	}, c)
 })

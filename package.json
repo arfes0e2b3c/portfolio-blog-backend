@@ -1,31 +1,32 @@
 {
-  "name": "portfolio-blog-backend",
-  "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate",
-    "seed": "bun run src/seed/index.ts",
-    "migrate:seed": "bun migrate & bun seed",
-    "format": "bunx biome format --write ./src"
-  },
-  "dependencies": {
-    "@hono/swagger-ui": "^0.4.1",
-    "@hono/zod-openapi": "^0.16.0",
-    "@hono/zod-validator": "^0.2.2",
-    "drizzle-orm": "^0.33.0",
-    "hono": "^4.6.2",
-    "mysql2": "^3.11.3",
-    "pg": "^8.13.0",
-    "ulid": "^2.3.0",
-    "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.3",
-    "@types/bun": "latest",
-    "@types/mysql": "^2.15.26",
-    "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.24.2",
-    "typescript": "^5.6.3",
-    "vercel": "^37.11.0"
-  }
+	"name": "portfolio-blog-backend",
+	"scripts": {
+		"dev": "wrangler dev",
+		"generate": "drizzle-kit generate",
+		"migrate": "drizzle-kit migrate",
+		"seed": "bun run src/seed/index.ts",
+		"migrate:seed": "bun migrate & bun seed",
+		"format": "bunx biome format --write ./src",
+		"deploy": "wrangler deploy"
+	},
+	"dependencies": {
+		"@hono/swagger-ui": "^0.4.1",
+		"@hono/zod-openapi": "^0.16.0",
+		"@hono/zod-validator": "^0.2.2",
+		"drizzle-orm": "^0.33.0",
+		"hono": "^4.6.2",
+		"mysql2": "^3.11.3",
+		"pg": "^8.13.0",
+		"ulid": "^2.3.0",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.3",
+		"@types/bun": "latest",
+		"@types/mysql": "^2.15.26",
+		"@types/pg": "^8.11.10",
+		"drizzle-kit": "^0.24.2",
+		"typescript": "^5.6.3",
+		"vercel": "^37.11.0"
+	}
 }

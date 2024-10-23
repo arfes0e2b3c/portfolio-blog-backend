@@ -4,11 +4,11 @@ import { seedArticles } from './article'
 import { seedCategories } from './category'
 
 const client = new Pool({
-	host: 'localhost',
-	user: 'root',
-	password: 'password',
-	port: 5432,
-	database: 'testdb',
+	host: process.env.DB_HOST || 'localhost',
+	user: process.env.DB_USER || 'root',
+	password: process.env.DB_PASSWORD || 'password',
+	port: Number(process.env.DB_PORT) || 5432,
+	database: process.env.DB_NAME || 'testdb',
 })
 
 export const SeedDb = drizzle(client)
