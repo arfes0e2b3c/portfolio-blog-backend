@@ -29,7 +29,7 @@ app.doc31('/doc', {
 app.get(
 	'/ui',
 	swaggerUI({
-		url: '/doc',
+		url: '/api/doc',
 	})
 )
 
