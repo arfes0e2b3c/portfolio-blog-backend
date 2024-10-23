@@ -1,11 +1,12 @@
 import { sql } from 'drizzle-orm'
+import { Context } from 'hono'
 import type { ArticleInputSchema } from '../../openapi/article'
 import { withDbConnection } from '../db'
 import { articlesTable } from '../db/schema'
 
 class ArticleRepository {
-	async getAll() {
-		return withDbConnection(async (db) => {
+	async getAll(c: Context) {
+		return withDbConnection(c, async (db) => {
 			return await db
 				.select()
 				.from(articlesTable)
@@ -13,8 +14,8 @@ class ArticleRepository {
 		})
 	}
 
-	async findByTitle(title: string) {
-		return withDbConnection(async (db) => {
+	async findByTitle(c: Context, title: string) {
+		return withDbConnection(c, async (db) => {
 			return await db
 				.select()
 				.from(articlesTable)
@@ -24,8 +25,8 @@ class ArticleRepository {
 		})
 	}
 
-	async findById(articleId: string) {
-		return withDbConnection(async (db) => {
+	async findById(c: Context, articleId: string) {
+		return withDbConnection(c, async (db) => {
 			return await db
 				.select()
 				.from(articlesTable)
@@ -35,8 +36,8 @@ class ArticleRepository {
 		})
 	}
 
-	async create(body: ArticleInputSchema) {
-		return withDbConnection(async (db) => {
+	async create(c: Context, body: ArticleInputSchema) {
+		return withDbConnection(c, async (db) => {
 			const res = await db
 				.insert(articlesTable)
 				.values(body)
@@ -45,8 +46,8 @@ class ArticleRepository {
 		})
 	}
 
-	async updateById(body: ArticleInputSchema, articleId: string) {
-		return withDbConnection(async (db) => {
+	async updateById(c: Context, body: ArticleInputSchema, articleId: string) {
+		return withDbConnection(c, async (db) => {
 			const res = await db
 				.update(articlesTable)
 				.set({ updatedAt: sql`NOW()`, ...body })
@@ -58,8 +59,8 @@ class ArticleRepository {
 		})
 	}
 
-	async deleteById(articleId: string) {
-		return withDbConnection(async (db) => {
+	async deleteById(c: Context, articleId: string) {
+		return withDbConnection(c, async (db) => {
 			const res = await db
 				.update(articlesTable)
 				.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })

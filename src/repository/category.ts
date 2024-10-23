@@ -1,11 +1,12 @@
 import { sql } from 'drizzle-orm'
+import { Context } from 'hono'
 import type { CategoryInputSchema } from '../../openapi/category'
 import { withDbConnection } from '../db'
 import { categoriesTable } from '../db/schema'
 
 class CategoryRepository {
-	async getAll() {
-		return withDbConnection(async (db) => {
+	async getAll(c: Context) {
+		return withDbConnection(c, async (db) => {
 			return await db
 				.select()
 				.from(categoriesTable)
@@ -13,8 +14,8 @@ class CategoryRepository {
 		})
 	}
 
-	async findByName(name: string) {
-		return withDbConnection(async (db) => {
+	async findByName(c: Context, name: string) {
+		return withDbConnection(c, async (db) => {
 			return await db
 				.select()
 				.from(categoriesTable)
@@ -24,8 +25,8 @@ class CategoryRepository {
 		})
 	}
 
-	async findById(categoryId: string) {
-		return withDbConnection(async (db) => {
+	async findById(c: Context, categoryId: string) {
+		return withDbConnection(c, async (db) => {
 			return await db
 				.select()
 				.from(categoriesTable)
@@ -35,8 +36,8 @@ class CategoryRepository {
 		})
 	}
 
-	async create(body: CategoryInputSchema) {
-		return withDbConnection(async (db) => {
+	async create(c: Context, body: CategoryInputSchema) {
+		return withDbConnection(c, async (db) => {
 			const res = await db
 				.insert(categoriesTable)
 				.values(body)
@@ -45,8 +46,8 @@ class CategoryRepository {
 		})
 	}
 
-	async updateById(body: CategoryInputSchema, categoryId: string) {
-		return withDbConnection(async (db) => {
+	async updateById(c: Context, body: CategoryInputSchema, categoryId: string) {
+		return withDbConnection(c, async (db) => {
 			const res = await db
 				.update(categoriesTable)
 				.set({ updatedAt: sql`NOW()`, ...body })
@@ -58,8 +59,8 @@ class CategoryRepository {
 		})
 	}
 
-	async deleteById(categoryId: string) {
-		return withDbConnection(async (db) => {
+	async deleteById(c: Context, categoryId: string) {
+		return withDbConnection(c, async (db) => {
 			const res = await db
 				.update(categoriesTable)
 				.set({ deletedAt: sql`NOW()`, updatedAt: sql`NOW()` })
