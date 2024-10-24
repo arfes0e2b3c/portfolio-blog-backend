@@ -12,8 +12,10 @@ const app = new OpenAPIHono()
 
 app.openapi(fetchArticleListRoute, async (c) => {
 	return handleErrors(async (ctx) => {
-		const allArticles = await svc.article.getAll(ctx)
-		return ctx.json({ contents: allArticles })
+		const res = await svc.article.getAll(ctx)
+		return ctx.json({ contents: res })
+	}, c)
+})
 	}, c)
 })
 
