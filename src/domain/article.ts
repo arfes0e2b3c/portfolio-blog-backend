@@ -14,7 +14,7 @@ class ArticleDomain {
 
 	async exists(c: Context, articleId: string) {
 		const existingArticle = await repo.article.findById(c, articleId)
-		if (existingArticle.length === 0) {
+		if (!existingArticle) {
 			throw new HTTPException(400, {
 				message: 'The specified article does not exist',
 			})
