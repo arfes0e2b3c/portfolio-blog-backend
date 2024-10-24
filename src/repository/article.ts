@@ -27,12 +27,13 @@ class ArticleRepository {
 
 	async findById(c: Context, articleId: string) {
 		return withDbConnection(c, async (db) => {
-			return await db
+			const res = await db
 				.select()
 				.from(articlesTable)
 				.where(
 					sql`${articlesTable.id} = ${articleId} and ${articlesTable.deletedAt} IS NULL`
 				)
+			return res[0]
 		})
 	}
 
