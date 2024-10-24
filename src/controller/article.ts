@@ -1,6 +1,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import {
 	deleteArticleRoute,
+	fetchArticleDetailRoute,
 	fetchArticleListRoute,
 	patchArticleRoute,
 	postArticleRoute,
@@ -16,6 +17,12 @@ app.openapi(fetchArticleListRoute, async (c) => {
 		return ctx.json({ contents: res })
 	}, c)
 })
+
+app.openapi(fetchArticleDetailRoute, async (c) => {
+	return handleErrors(async (ctx) => {
+		const { articleId } = ctx.req.valid('param')
+		const res = await svc.article.findById(ctx, articleId)
+		return ctx.json({ contents: res })
 	}, c)
 })
 
