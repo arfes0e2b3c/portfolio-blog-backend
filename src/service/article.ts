@@ -8,6 +8,10 @@ class ArticleService {
 		return await repo.article.getAll(c)
 	}
 
+	async findById(c: Context, articleId: string) {
+		return await repo.article.findById(c, articleId)
+	}
+
 	async create(c: Context, body: ArticleInputSchema) {
 		await domain.article.isUniqueTitle(c, body.title)
 		await domain.article.exists(c, body.category)
